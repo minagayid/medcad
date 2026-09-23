@@ -22,12 +22,15 @@
           </div>
         </div>
         <div class="case-heading">
-          <span class="case-kicker">CASE / PE-026</span>
-          <span class="case-name">Lower limb · socket study</span>
+          <span class="case-kicker">STUDY / PE-026</span>
+          <span class="case-name" id="studyName">Template geometry study</span>
+          <span class="study-status-pill" id="studyStatusPill">template only</span>
         </div>
         <div class="top-actions">
+          <button class="ghost-button" id="importStudyButton"><span class="button-icon">＋</span> Add source</button>
           <button class="ghost-button" id="saveButton"><span class="button-icon">◌</span> Save snapshot</button>
-          <button class="primary-button" id="exportButton"><span class="button-icon">⇩</span> Export <span class="button-caret">⌄</span></button>
+          <button class="ghost-button inspector-button" id="inspectorButton" aria-expanded="false"><span class="button-icon">▤</span> Inspector</button>
+          <button class="primary-button" id="exportButton"><span class="button-icon">⇩</span> Prepare export</button>
           <button class="icon-button" id="menuButton" aria-label="Open menu">•••</button>
         </div>
       </header>
@@ -36,10 +39,10 @@
         <aside class="left-rail" aria-label="Tools">
           <div class="rail-tools">
             <button class="rail-button is-active" data-tool="select" title="Select"><span>⌁</span><small>Select</small></button>
-            <button class="rail-button" data-tool="sculpt" title="Sculpt"><span>✦</span><small>Sculpt</small></button>
+            <button class="rail-button is-disabled" data-tool="sculpt" title="Sculpt is not implemented" disabled><span>✦</span><small>Sculpt</small></button>
             <button class="rail-button" data-tool="measure" title="Measure"><span>⌗</span><small>Measure</small></button>
             <button class="rail-button" data-tool="mirror" title="Mirror"><span>◐</span><small>Mirror</small></button>
-            <button class="rail-button" data-tool="boolean" title="Boolean"><span>⊕</span><small>Boolean</small></button>
+            <button class="rail-button is-disabled" data-tool="boolean" title="Boolean is not implemented" disabled><span>⊕</span><small>Boolean</small></button>
             <button class="rail-button" data-tool="reference" title="Reference"><span>▧</span><small>Atlas</small></button>
           </div>
           <div class="rail-foot">
@@ -56,16 +59,22 @@
             </div>
             <button class="small-icon-button" id="addPartButton" aria-label="Add custom part">+</button>
           </div>
+          <div class="study-card" id="studyCard">
+            <div class="study-card-top"><span class="study-card-label">SOURCE STUDY</span><span class="study-state-dot"></span></div>
+            <strong id="studyCardTitle">No source loaded</strong>
+            <p id="studyCardDetail">Template geometry only · no anatomy claim</p>
+            <button class="study-card-action" id="studyCardAction">Add a reference file</button>
+          </div>
           <label class="search-field">
             <span>⌕</span>
             <input id="librarySearch" type="search" placeholder="Search anatomy or part" />
             <kbd>/</kbd>
           </label>
           <div class="library-filters" role="tablist" aria-label="Part categories">
-            <button class="filter-chip is-active" data-category="All">All <span>05</span></button>
-            <button class="filter-chip" data-category="Lower limb">Lower limb</button>
-            <button class="filter-chip" data-category="Craniofacial">Craniofacial</button>
-            <button class="filter-chip" data-category="Upper limb">Upper limb</button>
+            <button class="filter-chip is-active" data-category="All" role="tab" aria-selected="true">All <span>05</span></button>
+            <button class="filter-chip" data-category="Lower limb" role="tab" aria-selected="false">Lower limb</button>
+            <button class="filter-chip" data-category="Craniofacial" role="tab" aria-selected="false">Craniofacial</button>
+            <button class="filter-chip" data-category="Upper limb" role="tab" aria-selected="false">Upper limb</button>
           </div>
           <div class="library-list" id="libraryList"></div>
           <div class="library-footer">
@@ -79,7 +88,7 @@
             <div class="toolbar-cluster">
               <button class="view-mode is-active" data-view="solid">Solid</button>
               <button class="view-mode" data-view="wire">Wire</button>
-              <button class="view-mode" data-view="xray">X-ray</button>
+              <button class="view-mode" data-view="xray">Transparency</button>
             </div>
             <div class="viewport-meta"><span class="live-dot"></span><span id="toolLabel">SELECT / OBJECT</span><span class="divider-dot">·</span><span>MM</span></div>
             <div class="toolbar-cluster toolbar-right">
@@ -90,20 +99,21 @@
           </div>
           <div class="viewport" id="viewport" tabindex="0" aria-label="3D prosthetic viewport. Drag to orbit, scroll to zoom.">
             <canvas id="modelCanvas"></canvas>
+            <div class="viewport-banner" id="viewportBanner">TEMPLATE STUDY · NO SOURCE ATTACHED · PREVIEW EXPORT ONLY</div>
             <div class="axis-gizmo"><span class="axis-x">X</span><span class="axis-y">Y</span><span class="axis-z">Z</span><i></i></div>
-            <div class="viewport-callout callout-top"><span class="callout-line"></span><span>posterior relief</span></div>
-            <div class="viewport-callout callout-bottom"><span class="callout-line"></span><span>distal trim line</span></div>
+            <div class="viewport-callout callout-top"><span class="callout-line"></span><span>construction axis</span></div>
+            <div class="viewport-callout callout-bottom"><span class="callout-line"></span><span>derived surface preview</span></div>
             <div class="measure-badge"><strong id="measureValue">420.0</strong><span>mm overall</span></div>
             <div class="viewport-hint"><span>drag</span> orbit <span>scroll</span> zoom <span>R</span> reset</div>
           </div>
           <div class="timeline-bar">
-            <div class="timeline-status"><span class="status-check">✓</span><span id="validationMessage">Geometry within starter envelope</span></div>
-            <div class="timeline-steps"><span class="step is-done">01 <i>anatomy</i></span><span class="step is-active">02 <i>shape</i></span><span class="step">03 <i>fabrication</i></span></div>
+            <div class="timeline-status"><span class="status-check is-neutral" id="workflowStatusIcon">•</span><span id="validationMessage">Start with a source or template decision</span></div>
+            <div class="timeline-steps" id="workflowSteps"><span class="step is-active">01 <i>setup</i></span><span class="step">02 <i>anatomy</i></span><span class="step">03 <i>design</i></span><span class="step">04 <i>checks</i></span><span class="step">05 <i>review</i></span></div>
             <div class="timeline-actions"><button class="icon-button subtle" id="undoButton" title="Undo">↶</button><button class="icon-button subtle" id="redoButton" title="Redo">↷</button></div>
           </div>
         </main>
 
-        <aside class="properties-panel panel-divider-left">
+        <aside class="properties-panel panel-divider-left" id="propertiesPanel">
           <div class="properties-scroll">
             <div class="panel-heading property-heading">
               <div>
@@ -128,34 +138,47 @@
               <label class="select-field"><span>Material</span><select id="materialSelect"><option>Nylon 12</option><option>Ti-6Al-4V</option><option>PEEK</option><option>Medical resin</option></select></label>
               <label class="select-field"><span>Process</span><select id="processSelect"><option>FDM / SLS</option><option>Powder-bed fusion</option><option>5-axis milling</option><option>SLA / DLP</option></select></label>
               <label class="select-field"><span>Layer height</span><select id="layerSelect"><option>0.10 mm</option><option>0.20 mm</option><option>0.05 mm</option><option>Toolpath / 0.5 mm</option></select></label>
-              <div class="validation-card" id="validationCard"><div class="validation-icon">✓</div><div><strong>Starter checks passed</strong><p>Solid wall · no open edges · within envelope</p></div></div>
+              <div class="validation-card is-neutral" id="validationCard"><div class="validation-icon">•</div><div><strong>Not checked</strong><p>Run geometry checks before preparing export</p></div></div>
             </section>
 
             <section class="property-section reference-section">
-              <div class="section-heading"><h2>Design notes</h2><span class="note-count">03</span></div>
-              <div class="note-list"><button class="note-item"><span class="note-pin copper"></span><span>Posterior relief follows load path</span><span>›</span></button><button class="note-item"><span class="note-pin green"></span><span>Keep trim line clear of flexion crease</span><span>›</span></button><button class="note-item"><span class="note-pin blue"></span><span>Review against patient scan</span><span>›</span></button></div>
+              <div class="section-heading"><h2>Design intent</h2><span class="note-count" id="intentCount">00</span></div>
+              <div class="intent-empty" id="intentEmpty">No anatomy-linked intent yet. Import a study or stay in template mode.</div>
+              <div class="note-list" id="noteList" hidden><button class="note-item"><span class="note-pin copper"></span><span>Clinician-authored relief zone</span><span>›</span></button><button class="note-item"><span class="note-pin green"></span><span>Reviewed trim or clearance boundary</span><span>›</span></button><button class="note-item"><span class="note-pin blue"></span><span>Source surface revision linked</span><span>›</span></button></div>
             </section>
           </div>
-          <div class="properties-footer"><button class="outline-button" id="validateButton">Run validation</button><button class="primary-button wide" id="exportStlButton">Export STL <span>⇩</span></button></div>
+          <div class="properties-footer"><button class="outline-button" id="validateButton">Run checks</button><button class="primary-button wide" id="exportStlButton">Prepare export <span>⇩</span></button></div>
         </aside>
       </div>
 
       <div class="toast" id="toast" role="status" aria-live="polite"></div>
-      <input type="file" id="referenceInput" accept="image/*,.dcm,.nii,.nii.gz" hidden />
+      <input type="file" id="referenceInput" accept="image/*,.dcm,.nii,.nii.gz,.json" multiple hidden />
+      <input type="file" id="studyInput" accept=".dcm,.nii,.nii.gz,.json,image/*" multiple hidden />
     </div>
 
     <dialog class="modal" id="atlasModal">
       <div class="modal-head"><div><div class="eyebrow">Reference notebook</div><h2>Medical design atlas</h2></div><button class="icon-button" id="closeAtlas" aria-label="Close reference atlas">×</button></div>
       <div class="modal-intro"><span class="atlas-emblem">◫</span><p>Open references for design context, annotated as geometry cues. These materials support exploration only; they do not replace imaging review, clinician sign-off, or manufacturing validation.</p></div>
       <div class="atlas-grid">
-        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind">ANATOMY</span><span>01</span></div><h3>Patient-specific cranial plate</h3><p>Map defect boundary, fixation zones, and thickness transitions from CT-derived geometry.</p><button data-atlas-action="craniofacial">View design notes ↗</button></article>
-        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind green">WORKFLOW</span><span>02</span></div><h3>Image-to-mesh handoff</h3><p>Keep segmentation provenance visible from source image through printable mesh.</p><button data-atlas-action="workflow">View design notes ↗</button></article>
-        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind blue">FABRICATION</span><span>03</span></div><h3>Build-ready geometry</h3><p>Check wall thickness, watertightness, orientation, and process-specific constraints.</p><button data-atlas-action="fabrication">View design notes ↗</button></article>
+        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind">ANATOMY</span><span>01</span></div><div class="atlas-image atlas-segmentation"><img src="https://github.com/Slicer/Slicer/releases/download/docs-resources/image_segmentation_views.png" alt="3D Slicer segmentation views" loading="eager" /><span>SLICE · LABELMAP · SURFACE</span></div><h3>Craniofacial contour context</h3><p>Use defect boundaries and surrounding anatomy as reviewed inputs, never as a universal plate.</p><a class="atlas-note-link" href="docs/medical-reference-notebook.md#ref-005--patient-specific-cranial-and-orbital-reconstruction" target="_blank" rel="noreferrer">Open design notes ↗</a></article>
+        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind green">WORKFLOW</span><span>02</span></div><div class="atlas-image atlas-editor"><img src="https://github.com/Slicer/Slicer/releases/download/docs-resources/image_segmentation_segment_editor_module.png" alt="3D Slicer segment editor" loading="eager" /><span>SEGMENT EDITOR · REVIEW</span></div><h3>Image-to-mesh handoff</h3><p>Keep source image, editable segmentation, and derived surface distinct and traceable.</p><a class="atlas-note-link" href="docs/medical-reference-notebook.md#ref-001--segmentation-as-an-explicit-design-input" target="_blank" rel="noreferrer">Open design notes ↗</a></article>
+        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind blue">FABRICATION</span><span>03</span></div><div class="atlas-image atlas-placeholder">◇<span>TOPOLOGY · WALL · ENVELOPE</span></div><h3>Preview geometry checks</h3><p>Compute topology and bounds before downloading a clearly marked preview mesh.</p><a class="atlas-note-link" href="docs/medical-reference-notebook.md#ref-006--additive-manufacturing-design-and-quality-gates" target="_blank" rel="noreferrer">Open design notes ↗</a></article>
       </div>
+      <div class="catalog-heading"><span>LIBRARIES TO CONNECT</span><small>Open references · verify terms per asset</small></div>
+      <div class="catalog-list" id="catalogList"><div class="catalog-loading">Loading library catalog…</div></div>
       <div class="modal-foot"><span class="tiny-lock">⌁</span> Notebook source: <a href="docs/medical-reference-notebook.md" target="_blank" rel="noreferrer">docs/medical-reference-notebook.md</a><button class="outline-button" id="importReferenceButton">Import reference</button></div>
     </dialog>
 
+    <dialog class="modal export-modal" id="exportModal">
+      <div class="modal-head"><div><div class="eyebrow">Review gate</div><h2>Prepare a preview export</h2></div><button class="icon-button" id="closeExport" aria-label="Close export review">×</button></div>
+      <div class="export-warning"><span>!</span><p>This prototype can emit a preview mesh only. A qualified reviewer must verify anatomy, segmentation, design intent, material, process, and applicable testing before any manufacturing use.</p></div>
+      <div class="export-grid"><div><span class="export-label">MODEL</span><strong id="exportModelName">Transtibial socket</strong><small id="exportModelDetail">Template geometry · preview only</small></div><div><span class="export-label">FORMAT</span><select id="exportFormat"><option value="stl">STL</option><option value="obj">OBJ</option></select></div></div>
+      <div class="check-list" id="exportCheckList"></div>
+      <label class="ack-row"><input id="exportAck" type="checkbox" /> <span>I understand this is a non-clinical preview export and will not use it as a patient-ready design.</span></label>
+      <div class="modal-foot"><span class="tiny-lock">⌁</span><span id="exportGateText">Run checks and acknowledge the preview boundary</span><button class="primary-button" id="confirmExport" disabled>Download preview</button></div>
+    </dialog>
+
     <dialog class="modal help-modal" id="helpModal"><div class="modal-head"><div><div class="eyebrow">Quick guide</div><h2>Shape with intent</h2></div><button class="icon-button" id="closeHelp">×</button></div><div class="help-grid"><div><span class="help-key">01</span><strong>Choose a starting geometry</strong><p>Use the part library as a parametric study, not a clinical template.</p></div><div><span class="help-key">02</span><strong>Adjust the envelope</strong><p>Change dimensions, symmetry, and fabrication settings in the right panel.</p></div><div><span class="help-key">03</span><strong>Validate, then export</strong><p>Export a mesh only after a qualified reviewer confirms the source anatomy and process.</p></div></div><div class="safety-note"><span>!</span><p>pro-esthetic is a non-clinical geometry tool. Never use its starter parts as patient-ready designs.</p></div></dialog>
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
   </body>
 </html>

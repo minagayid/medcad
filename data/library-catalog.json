@@ -1,0 +1,191 @@
+{
+  "schema": "pro-esthetic.library-catalog.v1",
+  "lastReviewed": "2026-09-23",
+  "disclaimer": "Reference and research infrastructure only. These libraries are not prosthesis templates and do not establish clinical suitability.",
+  "sources": [
+    {
+      "id": "slicer",
+      "name": "3D Slicer",
+      "kind": "segmentation workstation",
+      "url": "https://www.slicer.org/",
+      "license": "Open source; verify component licenses",
+      "supports": ["DICOM", "labelmaps", "closed surfaces", "segment terminology", "mesh export"],
+      "role": "Author and review segmentations before design handoff",
+      "guardrail": "Keep the editable source representation and derived surface linked"
+    },
+    {
+      "id": "dicom",
+      "name": "DICOM / DICOMweb",
+      "kind": "clinical data standard",
+      "url": "https://dicom.nema.org/medical/dicom/current/output/chtml/part18/ps3.18.html",
+      "license": "Standards publication",
+      "supports": ["study provenance", "frame of reference", "surface segmentation", "web services"],
+      "role": "Preserve source-study identity, coordinate frames, and derived-object links",
+      "guardrail": "Never reduce a study to a filename or a screenshot"
+    },
+    {
+      "id": "open-anatomy",
+      "name": "Open Anatomy Project",
+      "kind": "open anatomy atlas",
+      "url": "https://www.openanatomy.org/",
+      "license": "Per-atlas terms; verify before redistribution",
+      "supports": ["brain MRI", "inner-ear CT", "knee", "head and neck", "abdomen"],
+      "role": "Anatomical context and atlas-based terminology",
+      "guardrail": "Atlas geometry is context, not a patient-matched device"
+    },
+    {
+      "id": "z-anatomy",
+      "name": "Z-Anatomy / BodyParts3D",
+      "kind": "Blender anatomy reference",
+      "url": "https://github.com/Z-Anatomy/Models-of-human-anatomy",
+      "license": "CC BY-SA; preserve attribution and share-alike terms",
+      "supports": ["Blender template", "anatomical meshes", "labels"],
+      "role": "Blender-native anatomy reference and semantic naming",
+      "guardrail": "Do not present reference anatomy meshes as prosthetic geometry"
+    },
+    {
+      "id": "ohif",
+      "name": "OHIF + Cornerstone3D",
+      "kind": "web imaging viewer",
+      "url": "https://docs.ohif.org/",
+      "license": "MIT for OHIF; check dependencies",
+      "supports": ["DICOMweb", "multiplanar views", "labelmaps", "measurement", "annotation"],
+      "role": "Reference-study viewing and task-based imaging workflows",
+      "guardrail": "Treat viewer annotations as reviewable derived data"
+    },
+    {
+      "id": "monai-label",
+      "name": "MONAI Label",
+      "kind": "human-in-the-loop ML annotation",
+      "url": "https://docs.monai.io/projects/label/en/latest/",
+      "license": "Open source; model/data terms vary",
+      "supports": ["interactive labeling", "active learning", "3D segmentation"],
+      "role": "Research-only assisted annotation with human correction",
+      "guardrail": "Store model version, uncertainty, edits, and reviewer identity"
+    },
+    {
+      "id": "itk",
+      "name": "ITK / SimpleITK",
+      "kind": "image and mesh processing",
+      "url": "https://docs.itk.org/",
+      "license": "Apache 2.0; verify modules and dependencies",
+      "supports": ["registration", "image processing", "mesh IO", "transforms"],
+      "role": "Reference implementation for image-to-surface processing and coordinate transforms",
+      "guardrail": "Keep image metadata and transforms attached to every derived surface"
+    },
+    {
+      "id": "vtk",
+      "name": "VTK",
+      "kind": "visualization and geometry toolkit",
+      "url": "https://vtk.org/",
+      "license": "BSD-style; verify dependencies",
+      "supports": ["polydata", "volume rendering", "contours", "mesh filters"],
+      "role": "Reference toolkit for review visualization and mesh operations",
+      "guardrail": "Visualization is not a validation result; preserve the source and parameters"
+    },
+    {
+      "id": "open3d",
+      "name": "Open3D",
+      "kind": "3D data processing",
+      "url": "https://www.open3d.org/",
+      "license": "MIT; verify bundled components",
+      "supports": ["point clouds", "triangle meshes", "registration", "reconstruction"],
+      "role": "Research reference for registration, inspection, and mesh processing",
+      "guardrail": "Registration error and coordinate frame must be reported, not hidden"
+    },
+    {
+      "id": "cgal",
+      "name": "CGAL",
+      "kind": "computational geometry",
+      "url": "https://www.cgal.org/",
+      "license": "GPL/LGPL components; review package choice",
+      "supports": ["mesh generation", "exact predicates", "polygon meshes", "repair"],
+      "role": "Candidate robust geometry kernel for a future manufacturing-grade path",
+      "guardrail": "Do not claim production watertightness until kernel settings and tolerances are tested"
+    },
+    {
+      "id": "opencascade",
+      "name": "Open CASCADE Technology",
+      "kind": "CAD kernel",
+      "url": "https://dev.opencascade.org/",
+      "license": "LGPL with exception; verify distribution obligations",
+      "supports": ["STEP", "BREP", "solids", "booleans", "fillets"],
+      "role": "Candidate solid/CAD kernel for milling-oriented design handoff",
+      "guardrail": "A surface preview is not a CAD solid or a verified toolpath"
+    },
+    {
+      "id": "gmsh",
+      "name": "Gmsh",
+      "kind": "finite-element mesh generator",
+      "url": "https://gmsh.info/",
+      "license": "GPL; verify plugins and redistribution terms",
+      "supports": ["CAD import", "surface remeshing", "tetrahedralization", "mesh inspection"],
+      "role": "Research reference for volumetric meshing and finite-element preparation",
+      "guardrail": "Engineering simulation meshes are not clinical device approval evidence"
+    },
+    {
+      "id": "slicercmf",
+      "name": "SlicerCMF",
+      "kind": "cranio-maxillofacial 3D Slicer extension",
+      "url": "https://github.com/DCBIA-OrthoLab/SlicerCMF",
+      "license": "Review repository and extension licenses before reuse",
+      "supports": ["craniofacial registration", "dental imaging", "serial studies"],
+      "role": "Domain-specific research reference for craniofacial workflows",
+      "guardrail": "Use for method discovery and review, not as a hidden clinical dependency"
+    },
+    {
+      "id": "tcia",
+      "name": "The Cancer Imaging Archive",
+      "kind": "de-identified imaging archive",
+      "url": "https://www.cancerimagingarchive.net/",
+      "license": "Collection-specific data use terms",
+      "supports": ["de-identified test studies", "DICOM collections", "research reproducibility"],
+      "role": "Test fixtures and research evaluation, not clinical input",
+      "guardrail": "Record collection, version, and usage terms per study"
+    },
+    {
+      "id": "nih3d",
+      "name": "NIH 3D",
+      "kind": "open biomedical model reference",
+      "url": "https://3d.nih.gov/",
+      "license": "Per-asset terms; verify before reuse",
+      "supports": ["biomedical 3D models", "educational references", "printable model context"],
+      "role": "Model-library discovery and educational references",
+      "guardrail": "Attach asset license and intended-use metadata before import"
+    }
+  ],
+  "designKits": [
+    {
+      "id": "socket",
+      "name": "Transtibial socket study",
+      "anatomy": ["residual limb", "fibula", "tibia"],
+      "requiredInputs": ["residual-limb surface", "laterality", "clinician-authored landmarks", "trimline intent", "relief zones"],
+      "reviewChecks": ["interface assumptions are explicit", "pressure/load study attached", "alignment intent reviewed"],
+      "notClinicalRule": "No universal relief or pressure pattern is implied"
+    },
+    {
+      "id": "cranial",
+      "name": "Cranial contour plate study",
+      "anatomy": ["cranial defect", "surrounding bone"],
+      "requiredInputs": ["defect boundary", "surrounding-bone surface", "fixation zones", "clearance zones", "material/process envelope"],
+      "reviewChecks": ["bilateral contour reviewed", "fixation plan reviewed", "derived surface traceable to source study"],
+      "notClinicalRule": "Contour continuity is a design intent, not a clinical approval"
+    },
+    {
+      "id": "orbit",
+      "name": "Orbital rim study",
+      "anatomy": ["orbital wall", "orbital volume", "adjacent facial bones"],
+      "requiredInputs": ["registered contralateral anatomy", "defect boundary", "optic/soft-tissue keep-outs", "fit review"],
+      "reviewChecks": ["bilateral registration reviewed", "clearances reviewed", "evidence level recorded"],
+      "notClinicalRule": "The app does not infer safe orbital clearances"
+    },
+    {
+      "id": "finger",
+      "name": "Phalanx / joint study",
+      "anatomy": ["phalanx", "joint axis", "soft-tissue envelope"],
+      "requiredInputs": ["laterality", "joint axis", "range-of-motion envelope", "clearance zones"],
+      "reviewChecks": ["articulation envelope reviewed", "collision checks run", "source anatomy traceable"],
+      "notClinicalRule": "The starter mesh is not a functional joint implant"
+    }
+  ]
+}
