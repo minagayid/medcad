@@ -4,11 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b1117" />
-    <meta name="description" content="pro-esthetic — a non-clinical prosthetic geometry planning workstation." />
-    <title>pro-esthetic · design workstation</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <meta name="description" content="medcad — a non-clinical prosthetic geometry planning workstation." />
+    <title>medcad · design workstation</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -17,17 +14,17 @@
         <div class="brand-lockup">
           <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
           <div>
-            <div class="brand-name">pro-esthetic</div>
+            <div class="brand-name">medcad</div>
             <div class="brand-subtitle">design workstation <span class="status-dot"></span> local session</div>
           </div>
         </div>
         <div class="case-heading">
-          <span class="case-kicker">STUDY / PE-026</span>
+          <span class="case-kicker">STUDY / MC-026</span>
           <span class="case-name" id="studyName">Template geometry study</span>
           <span class="study-status-pill" id="studyStatusPill">template only</span>
         </div>
         <div class="top-actions">
-          <button class="ghost-button" id="importStudyButton"><span class="button-icon">＋</span> Add source</button>
+          <button class="ghost-button" id="importStudyButton"><span class="button-icon">＋</span> Add scan mesh</button>
           <button class="ghost-button" id="saveButton"><span class="button-icon">◌</span> Save snapshot</button>
           <button class="ghost-button inspector-button" id="inspectorButton" aria-expanded="false"><span class="button-icon">▤</span> Inspector</button>
           <button class="primary-button" id="exportButton"><span class="button-icon">⇩</span> Prepare export</button>
@@ -60,10 +57,14 @@
             <button class="small-icon-button" id="addPartButton" aria-label="Add custom part">+</button>
           </div>
           <div class="study-card" id="studyCard">
-            <div class="study-card-top"><span class="study-card-label">SOURCE STUDY</span><span class="study-state-dot"></span></div>
+            <div class="study-card-top"><span class="study-card-label">INPUT SURFACE</span><span class="study-state-dot"></span></div>
             <strong id="studyCardTitle">No source loaded</strong>
             <p id="studyCardDetail">Template geometry only · no anatomy claim</p>
-            <button class="study-card-action" id="studyCardAction">Add a reference file</button>
+            <label class="source-unit-field" for="sourceUnits">Source units
+              <select id="sourceUnits"><option value="mm">Millimeters (mm)</option><option value="cm">Centimeters (cm)</option><option value="in">Inches (in)</option></select>
+            </label>
+            <small class="source-import-note">STL / OBJ only · DICOM / NIfTI not parsed. De-identify data and filenames before import.</small>
+            <button class="study-card-action" id="studyCardAction">Add a scan surface</button>
           </div>
           <label class="search-field">
             <span>⌕</span>
@@ -101,9 +102,9 @@
             <canvas id="modelCanvas"></canvas>
             <div class="viewport-banner" id="viewportBanner">TEMPLATE STUDY · NO SOURCE ATTACHED · PREVIEW EXPORT ONLY</div>
             <div class="axis-gizmo"><span class="axis-x">X</span><span class="axis-y">Y</span><span class="axis-z">Z</span><i></i></div>
-            <div class="viewport-callout callout-top"><span class="callout-line"></span><span>construction axis</span></div>
-            <div class="viewport-callout callout-bottom"><span class="callout-line"></span><span>derived surface preview</span></div>
-            <div class="measure-badge"><strong id="measureValue">420.0</strong><span>mm overall</span></div>
+            <div class="viewport-callout callout-top"><span class="callout-line"></span><span id="viewportCalloutTop">construction axis</span></div>
+            <div class="viewport-callout callout-bottom"><span class="callout-line"></span><span id="viewportCalloutBottom">derived surface preview</span></div>
+            <div class="measure-badge"><strong id="measureValue">420.0</strong><span id="measureCaption">mm overall</span></div>
             <div class="viewport-hint"><span>drag</span> orbit <span>scroll</span> zoom <span>R</span> reset</div>
           </div>
           <div class="timeline-bar">
@@ -126,9 +127,9 @@
 
             <section class="property-section">
               <div class="section-heading"><h2>Geometry</h2><button class="reset-button" id="resetGeometry">Reset</button></div>
-              <label class="slider-row"><span>Overall length <output id="lengthOutput">420.0 mm</output></span><input id="lengthSlider" type="range" min="280" max="520" step="0.5" value="420" /></label>
-              <label class="slider-row"><span>Wall thickness <output id="thicknessOutput">4.5 mm</output></span><input id="thicknessSlider" type="range" min="2.5" max="8" step="0.1" value="4.5" /></label>
-              <label class="slider-row"><span>Blend radius <output id="radiusOutput">8.0 mm</output></span><input id="radiusSlider" type="range" min="2" max="18" step="0.5" value="8" /></label>
+              <label class="slider-row"><span><span id="lengthLabel">Overall length</span><output id="lengthOutput">420.0 mm</output></span><input id="lengthSlider" type="range" min="280" max="520" step="0.5" value="420" /></label>
+              <label class="slider-row"><span><span id="thicknessLabel">Wall thickness</span><output id="thicknessOutput">4.5 mm</output></span><input id="thicknessSlider" type="range" min="2.5" max="8" step="0.1" value="4.5" /></label>
+              <label class="slider-row"><span><span id="radiusLabel">Blend radius</span><output id="radiusOutput">8.0 mm</output></span><input id="radiusSlider" type="range" min="2" max="18" step="0.5" value="8" /></label>
               <div class="toggle-row"><span>Preserve symmetry</span><button class="toggle is-on" id="symmetryToggle" role="switch" aria-checked="true"><i></i></button></div>
               <div class="toggle-row"><span>Reference plane</span><button class="toggle is-on" id="planeToggle" role="switch" aria-checked="true"><i></i></button></div>
             </section>
@@ -152,21 +153,21 @@
       </div>
 
       <div class="toast" id="toast" role="status" aria-live="polite"></div>
-      <input type="file" id="referenceInput" accept="image/*,.dcm,.nii,.nii.gz,.json" multiple hidden />
-      <input type="file" id="studyInput" accept=".dcm,.nii,.nii.gz,.json,image/*" multiple hidden />
+      <input type="file" id="referenceInput" accept=".stl,.obj" hidden />
+      <input type="file" id="studyInput" accept=".stl,.obj" hidden />
     </div>
 
     <dialog class="modal" id="atlasModal">
       <div class="modal-head"><div><div class="eyebrow">Reference notebook</div><h2>Medical design atlas</h2></div><button class="icon-button" id="closeAtlas" aria-label="Close reference atlas">×</button></div>
       <div class="modal-intro"><span class="atlas-emblem">◫</span><p>Open references for design context, annotated as geometry cues. These materials support exploration only; they do not replace imaging review, clinician sign-off, or manufacturing validation.</p></div>
       <div class="atlas-grid">
-        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind">ANATOMY</span><span>01</span></div><div class="atlas-image atlas-segmentation"><img src="https://github.com/Slicer/Slicer/releases/download/docs-resources/image_segmentation_views.png" alt="3D Slicer segmentation views" loading="eager" /><span>SLICE · LABELMAP · SURFACE</span></div><h3>Craniofacial contour context</h3><p>Use defect boundaries and surrounding anatomy as reviewed inputs, never as a universal plate.</p><a class="atlas-note-link" href="docs/medical-reference-notebook.md#ref-005--patient-specific-cranial-and-orbital-reconstruction" target="_blank" rel="noreferrer">Open design notes ↗</a></article>
-        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind green">WORKFLOW</span><span>02</span></div><div class="atlas-image atlas-editor"><img src="https://github.com/Slicer/Slicer/releases/download/docs-resources/image_segmentation_segment_editor_module.png" alt="3D Slicer segment editor" loading="eager" /><span>SEGMENT EDITOR · REVIEW</span></div><h3>Image-to-mesh handoff</h3><p>Keep source image, editable segmentation, and derived surface distinct and traceable.</p><a class="atlas-note-link" href="docs/medical-reference-notebook.md#ref-001--segmentation-as-an-explicit-design-input" target="_blank" rel="noreferrer">Open design notes ↗</a></article>
+        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind">ANATOMY</span><span>01</span></div><div class="atlas-image atlas-segmentation"><span>SLICE · LABELMAP · SURFACE</span></div><h3>Craniofacial contour context</h3><p>Use defect boundaries and surrounding anatomy as reviewed inputs, never as a universal plate.</p><a class="atlas-note-link" href="docs/medical-reference-notebook.md#ref-005--patient-specific-cranial-and-orbital-reconstruction" target="_blank" rel="noreferrer">Open design notes ↗</a></article>
+        <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind green">WORKFLOW</span><span>02</span></div><div class="atlas-image atlas-editor"><span>SEGMENT EDITOR · REVIEW</span></div><h3>Image-to-mesh handoff</h3><p>Keep source image, editable segmentation, and derived surface distinct and traceable.</p><a class="atlas-note-link" href="docs/medical-reference-notebook.md#ref-001--segmentation-as-an-explicit-design-input" target="_blank" rel="noreferrer">Open design notes ↗</a></article>
         <article class="atlas-card"><div class="atlas-card-top"><span class="atlas-kind blue">FABRICATION</span><span>03</span></div><div class="atlas-image atlas-placeholder">◇<span>TOPOLOGY · WALL · ENVELOPE</span></div><h3>Preview geometry checks</h3><p>Compute topology and bounds before downloading a clearly marked preview mesh.</p><a class="atlas-note-link" href="docs/medical-reference-notebook.md#ref-006--additive-manufacturing-design-and-quality-gates" target="_blank" rel="noreferrer">Open design notes ↗</a></article>
       </div>
       <div class="catalog-heading"><span>LIBRARIES TO CONNECT</span><small>Open references · verify terms per asset</small></div>
       <div class="catalog-list" id="catalogList"><div class="catalog-loading">Loading library catalog…</div></div>
-      <div class="modal-foot"><span class="tiny-lock">⌁</span> Notebook source: <a href="docs/medical-reference-notebook.md" target="_blank" rel="noreferrer">docs/medical-reference-notebook.md</a><button class="outline-button" id="importReferenceButton">Import reference</button></div>
+      <div class="modal-foot"><span class="tiny-lock">⌁</span> Notebook source: <a href="docs/medical-reference-notebook.md" target="_blank" rel="noreferrer">docs/medical-reference-notebook.md</a><button class="outline-button" id="importReferenceButton">Import scan mesh</button></div>
     </dialog>
 
     <dialog class="modal export-modal" id="exportModal">
@@ -178,7 +179,7 @@
       <div class="modal-foot"><span class="tiny-lock">⌁</span><span id="exportGateText">Run checks and acknowledge the preview boundary</span><button class="primary-button" id="confirmExport" disabled>Download preview</button></div>
     </dialog>
 
-    <dialog class="modal help-modal" id="helpModal"><div class="modal-head"><div><div class="eyebrow">Quick guide</div><h2>Shape with intent</h2></div><button class="icon-button" id="closeHelp">×</button></div><div class="help-grid"><div><span class="help-key">01</span><strong>Choose a starting geometry</strong><p>Use the part library as a parametric study, not a clinical template.</p></div><div><span class="help-key">02</span><strong>Adjust the envelope</strong><p>Change dimensions, symmetry, and fabrication settings in the right panel.</p></div><div><span class="help-key">03</span><strong>Validate, then export</strong><p>Export a mesh only after a qualified reviewer confirms the source anatomy and process.</p></div></div><div class="safety-note"><span>!</span><p>pro-esthetic is a non-clinical geometry tool. Never use its starter parts as patient-ready designs.</p></div></dialog>
+    <dialog class="modal help-modal" id="helpModal"><div class="modal-head"><div><div class="eyebrow">Quick guide</div><h2>Shape with intent</h2></div><button class="icon-button" id="closeHelp">×</button></div><div class="help-grid"><div><span class="help-key">01</span><strong>Choose a starting geometry</strong><p>Use the part library as a parametric study, not a clinical template.</p></div><div><span class="help-key">02</span><strong>Adjust the envelope</strong><p>Change dimensions, symmetry, and fabrication settings in the right panel.</p></div><div><span class="help-key">03</span><strong>Validate, then export</strong><p>Export a mesh only after a qualified reviewer confirms the source anatomy and process.</p></div></div><div class="safety-note"><span>!</span><p>medcad is a non-clinical geometry tool. Never use its starter parts as patient-ready designs.</p></div></dialog>
     <script type="module" src="app.js"></script>
   </body>
 </html>

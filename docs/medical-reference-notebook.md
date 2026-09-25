@@ -1,4 +1,4 @@
-# pro-esthetic · medical reference notebook
+# medcad · medical reference notebook
 
 **Notebook status:** design-context only  
 **Prepared:** 2026-09-23  
@@ -44,7 +44,7 @@
 - **Source:** [Essential Requirements and Relevant Technologies for Load-Bearing 3D-Printed Transtibial Prosthetic Sockets and Their Components (PubMed)](https://pubmed.ncbi.nlm.nih.gov/41406382/)
 - **Design cues:** separate geometry editing from process qualification; record intended process, material, orientation, and test standard; keep a visible “review before manufacture” gate.
 - **Product mapping:** the Fabrication panel, process/material/layer controls, validation card, and non-clinical export warning.
-- **Evidence limit:** the review discusses load-bearing socket requirements and manufacturing/testing considerations; it does not validate pro-esthetic’s starter meshes.
+- **Evidence limit:** the review discusses load-bearing socket requirements and manufacturing/testing considerations; it does not validate medcad’s starter meshes.
 
 ### REF-005 · patient-specific cranial and orbital reconstruction
 
@@ -65,7 +65,7 @@
 The following records are a format proposal for a future reviewed dataset. Fields are intentionally explicit so that a model can be evaluated against human-reviewed labels rather than treated as an authority.
 
 ```yaml
-schema: pro-esthetic.medical-reference.v0
+schema: medcad.medical-reference.v0
 review_policy: human_review_required
 records:
   - id: REF-001
@@ -76,7 +76,7 @@ records:
     suggested_regions: [reference_plane, derived_mesh]
     model_inference: none
     reviewer_status: contextual_only
-  - id: PE-101
+  - id: MC-101
     source_kind: patient_specific_imaging
     modality: CT_or_3D_scan
     anatomical_targets: [residual_limb, socket_interface]
