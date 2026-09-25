@@ -1,0 +1,50 @@
+{
+  "name": "medcad",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Offline-capable local prosthetic surface review workstation",
+  "type": "module",
+  "main": "electron-main.mjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "desktop:dev": "electron .",
+    "desktop:pack": "electron-builder --win portable --x64",
+    "test": "node tests/mesh-import.test.mjs && node tests/mesh-core.test.mjs && node tests/dom-contract.test.mjs && node tests/server.test.mjs && node tests/desktop-contract.test.mjs"
+  },
+  "devDependencies": {
+    "electron": "44.4.5",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "org.medcad.workstation",
+    "productName": "medcad",
+    "asar": true,
+    "files": [
+      "README.md",
+      "index.html",
+      "app.js",
+      "mesh-core.mjs",
+      "mesh-import.mjs",
+      "server.mjs",
+      "electron-main.mjs",
+      "styles.css",
+      "data/**/*",
+      "docs/**/*"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "artifactName": "medcad-${version}-portable.exe"
+    },
+    "portable": {
+      "requestExecutionLevel": "user"
+    },
+    "directories": {
+      "output": "exports/desktop"
+    }
+  }
+}

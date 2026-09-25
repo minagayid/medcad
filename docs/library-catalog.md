@@ -1,6 +1,6 @@
-# pro-esthetic library catalog
+# medcad library catalog
 
-The serious version of pro-esthetic should not ship anonymous “medical prosthetic” meshes. It should maintain a provenance-aware catalog that separates anatomical context, source imaging, segmentation, design kits, and manufacturing references.
+The serious version of medcad should not ship anonymous “medical prosthetic” meshes. It should maintain a provenance-aware catalog that separates anatomical context, source imaging, segmentation, design kits, and manufacturing references.
 
 ## Recommended stack
 
