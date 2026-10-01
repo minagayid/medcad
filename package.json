@@ -12,7 +12,7 @@
     "start": "node server.mjs",
     "desktop:dev": "electron .",
     "desktop:pack": "electron-builder --win portable --x64",
-    "test": "node tests/mesh-import.test.mjs && node tests/mesh-core.test.mjs && node tests/dom-contract.test.mjs && node tests/server.test.mjs && node tests/desktop-contract.test.mjs"
+    "test": "node tests/mesh-import.test.mjs && node tests/mesh-core.test.mjs && node tests/dom-contract.test.mjs && node tests/server.test.mjs && node tests/desktop-contract.test.mjs && node tests/transaction-events.test.mjs"
   },
   "devDependencies": {
     "electron": "44.4.5",
@@ -28,6 +28,7 @@
       "app.js",
       "mesh-core.mjs",
       "mesh-import.mjs",
+      "transaction-events.mjs",
       "server.mjs",
       "electron-main.mjs",
       "styles.css",

@@ -15,6 +15,7 @@ The current prototype covers external prosthetic components and reconstruction-s
 - Starter validation checks for thickness and geometry envelope.
 - STL and OBJ triangle-surface import with declared mm/cm/in units, conversion to mm, measured bounds, vertex/index/degenerate-face checks, and a limited indexed edge-count screen. The parsed input mesh is what the viewport and preview exporter use; it is not fitted or modified.
 - Local snapshot persistence, viewport capture, and ASCII STL/OBJ preview export with an input hash/units/bounds manifest when a surface is loaded.
+- Preview manifests include a pseudonymous, SHA-256 hash-chained operational event timeline; see [`docs/TRANSACTION_EVENTS.md`](docs/TRANSACTION_EVENTS.md). This is metadata provenance only and does not make clinical, tax, or manufacturing determinations.
 - Reference notebook in [`docs/medical-reference-notebook.md`](docs/medical-reference-notebook.md) with source-linked design cues and an ML-ready annotation schema.
 - Provenance-aware catalog in [`docs/library-catalog.md`](docs/library-catalog.md) and [`data/library-catalog.json`](data/library-catalog.json), covering DICOM/DICOMweb, 3D Slicer, Open Anatomy, Z-Anatomy, OHIF/Cornerstone3D, MONAI Label, ITK, VTK, Open3D, CGAL, Open CASCADE, Gmsh, SlicerCMF, TCIA, and NIH 3D.
 - Red-team decision record in [`docs/red-team-review.md`](docs/red-team-review.md), including the medical-library roles, release boundary, and deferred patient-specific work.
