@@ -1,0 +1,131 @@
+{
+  "schema": "cad.library-registry.v1",
+  "version": 1,
+  "application": "medcad",
+  "reviewed": "2026-11-21",
+  "assets": [
+    {
+      "id": "bodyparts3d-teeth-4-3",
+      "title": "BodyParts3D head/dental anatomy reference",
+      "kind": "anatomy-reference",
+      "status": "educational-reference-only",
+      "sourceUrl": "https://github.com/organui/teeth-3d",
+      "revision": "f2cfe96f19dba7ec3982f2b06e6a34a1f6670450",
+      "format": "glb",
+      "license": "CC BY-SA 2.1 Japan",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en",
+      "attribution": "BodyParts3D / Anatomography, \u00a9 The Database Center for Life Science (DBCLS). Adapted by OrganUI.",
+      "modifications": "OrganUI selected 33 BodyParts3D meshes, triangulated polygon faces, recentered and uniformly scaled coordinates, changed axes to [x, z, -y], recomputed smooth normals, assigned illustrative colors and converted OBJ to GLB. procad redistributes the pinned model unchanged.",
+      "coverage": {
+        "structures": 33,
+        "permanent_teeth": 28,
+        "primary_teeth": 0,
+        "third_molars": 0,
+        "gums": 2,
+        "jaw_bones": 3
+      },
+      "structureMap": {
+        "upper-right-central-incisor": "11",
+        "upper-right-lateral-incisor": "12",
+        "upper-right-canine": "13",
+        "upper-right-first-premolar": "14",
+        "upper-right-second-premolar": "15",
+        "upper-right-first-molar": "16",
+        "upper-right-second-molar": "17",
+        "upper-left-central-incisor": "21",
+        "upper-left-lateral-incisor": "22",
+        "upper-left-canine": "23",
+        "upper-left-first-premolar": "24",
+        "upper-left-second-premolar": "25",
+        "upper-left-first-molar": "26",
+        "upper-left-second-molar": "27",
+        "lower-left-central-incisor": "31",
+        "lower-left-lateral-incisor": "32",
+        "lower-left-canine": "33",
+        "lower-left-first-premolar": "34",
+        "lower-left-second-premolar": "35",
+        "lower-left-first-molar": "36",
+        "lower-left-second-molar": "37",
+        "lower-right-central-incisor": "41",
+        "lower-right-lateral-incisor": "42",
+        "lower-right-canine": "43",
+        "lower-right-first-premolar": "44",
+        "lower-right-second-premolar": "45",
+        "lower-right-first-molar": "46",
+        "lower-right-second-molar": "47"
+      },
+      "units": {
+        "status": "display-normalized-not-mm",
+        "upstreamScale": 0.025,
+        "inverseScaleToSource": 40,
+        "physicalCalibration": "upstream-declared-mm-not-independently-measured",
+        "note": "GLB coordinates are display-normalized, not millimetres. Pinned preparation scales source by 0.025 and maps axes [x,y,z] to [x,z,-y]. Pinned original incisor OBJ header declares Bounds(mm); its hash was verified. x40 recovers upstream-declared source scale, not patient-specific calibration or independent physical measurement. No mm placement or measurement is enabled.",
+        "sourceUnits": "mm-declared-in-pinned-OBJ-header",
+        "sourceEvidence": "https://media.githubusercontent.com/media/olivercase/body_parts_3d_api/fd527e6f4daf732fd814314d9257df5877b844bc/meshes/FJ1279_BP22758_FMA55681_Right%20upper%20central%20incisor%20tooth.obj"
+      },
+      "notes": "28 permanent teeth, no primary teeth or third molars. Anatomy atlas, never a crown morphology, implant or scan-body library. Viewer does not export clinical geometry. This subset does not cover the rest of the body.",
+      "evidenceUrl": "https://github.com/organui/teeth-3d/blob/f2cfe96f19dba7ec3982f2b06e6a34a1f6670450/docs/MODEL_PROVENANCE.md",
+      "download": {
+        "url": "https://raw.githubusercontent.com/organui/teeth-3d/f2cfe96f19dba7ec3982f2b06e6a34a1f6670450/public/models/teeth.glb",
+        "sha256": "89a1074b0806eb41c318d38c78a269134c5070be7b90cb2f93ab2de7d35ec239",
+        "bytes": 1518540,
+        "rightsReviewed": true
+      }
+    },
+    {
+      "id": "enable-paraglider-audit",
+      "title": "e-NABLE Paraglider / Flexible Flyer",
+      "kind": "prosthetic-mechanism",
+      "status": "rights-chain-review-required-no-download",
+      "sourceUrl": "https://github.com/mendenm/flexible_flyer",
+      "revision": "2b713c0d81291172ae86f36519bbfbf10d124f9f",
+      "license": "LICENSE.txt attributes Reborn Hand under CC BY 3.0; scope for mixed-source derivatives remains unresolved",
+      "units": {
+        "status": "design-specific-not-verified",
+        "note": "No device geometry is imported or rendered."
+      },
+      "coverage": [
+        "parametric upper-limb hand components"
+      ],
+      "notes": "e-NABLE CAD resource links this source. README combines Phoenix v2, Unlimbited v3 and Reborn designs and expects additional parts from other repositories. A short upstream attribution file does not settle the complete derivative rights chain, completeness or fit. Do not redistribute as a complete hand library yet."
+    },
+    {
+      "id": "nih-enable-discovery",
+      "title": "NIH 3D e-NABLE collection",
+      "kind": "prosthetic-mechanism",
+      "status": "discovery-only",
+      "sourceUrl": "https://3d.nih.gov/collections/prosthetics",
+      "revision": "reviewed-2026-11-21",
+      "license": "Per-model licenses, no blanket redistribution grant",
+      "units": {
+        "status": "per-model-not-inspected",
+        "note": "No collection assets downloaded."
+      },
+      "coverage": [
+        "community assistive-device designs"
+      ],
+      "notes": "Review each exact model, revision, attribution, assembly instructions and safety guidance. Collection membership is not clinical validation."
+    },
+    {
+      "id": "existing-procedural-studies",
+      "title": "Existing MedCAD procedural study kits",
+      "kind": "anatomy-reference",
+      "status": "generic-procedural-not-anatomy-library",
+      "sourceUrl": "https://github.com/minagayid/medcad",
+      "revision": "ea0fd9f",
+      "license": "Existing project source terms, no third-party device geometry",
+      "units": {
+        "status": "template-parameters-not-patient-calibrated",
+        "note": "Generic procedural dimensions are not patient anatomy."
+      },
+      "coverage": [
+        "socket-like tube",
+        "cranial-like ellipsoid",
+        "finger-like capsule",
+        "orbital-like torus",
+        "blank"
+      ],
+      "notes": "Existing mesh-core.mjs primitives remain in the main app. They are not rights-cleared clinical prosthetic templates and cannot establish fit or load-bearing safety."
+    }
+  ]
+}
