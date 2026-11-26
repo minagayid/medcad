@@ -1,5 +1,5 @@
 const need=(ok,message)=>{if(!ok)throw Error(message);};
-export function parseAtlas(bytes){
+export function parseAtlas(bytes, expectedStructures=33){
  const data=new DataView(bytes);need(data.byteLength>=20&&data.getUint32(0,true)===0x46546c67&&data.getUint32(4,true)===2&&data.getUint32(8,true)===bytes.byteLength,'Invalid GLB');
  const n=data.getUint32(12,true);need(data.getUint32(16,true)===0x4e4f534a&&20+n+8<=bytes.byteLength,'Invalid GLB JSON chunk');
  const doc=JSON.parse(new TextDecoder().decode(new Uint8Array(bytes,20,n))),start=20+n,binSize=data.getUint32(start,true);need(data.getUint32(start+4,true)===0x004e4942&&start+8+binSize===bytes.byteLength,'Invalid GLB binary chunk');
@@ -13,7 +13,7 @@ export function parseAtlas(bytes){
   const fn={5126:'getFloat32',5125:'getUint32',5123:'getUint16',5121:'getUint8'}[a.componentType];
   return Array.from({length:a.count},(_,i)=>Array.from({length:count},(_,j)=>{const x=data[fn](offset+i*stride+j*size,true);need(Number.isFinite(x),'Nonfinite coordinate');return x;}));
  };
- const nodes=doc.nodes||[];need(nodes.length===33,'Pinned atlas must contain 33 named structures');
+ const nodes=doc.nodes||[];need(Number.isInteger(expectedStructures)&&expectedStructures>0&&nodes.length===expectedStructures,'Pinned atlas structure count mismatch');
  return nodes.map(node=>{
   need(!node.matrix&&!node.rotation&&!node.scale&&!node.translation,'Unexpected node transform');
   const primitives=doc.meshes[node.mesh]?.primitives;need(primitives?.length===1,'Expected one triangle primitive per structure');const p=primitives[0];need((p.mode??4)===4,'Non-triangle primitive');
@@ -34,10 +34,28 @@ if(typeof document!=='undefined'){
   for(const {f}of faces){const ps=f.map(i=>vertices[i]);const shade=Math.round(115+65*(1+Math.sin(ps[0][2]))/2);ctx.beginPath();ps.forEach((p,i)=>ctx[i?'lineTo':'moveTo'](canvas.width/2+(p[0]-center[0])*scale,canvas.height/2-(p[1]-center[1])*scale));ctx.closePath();ctx.fillStyle=`rgb(${shade+35},${shade+25},${shade})`;ctx.fill();ctx.strokeStyle='rgba(25,40,50,.15)';ctx.lineWidth=.4;ctx.stroke();}
   text('meshInfo',`${mesh.name} | ${mesh.vertices.length} vertices | ${mesh.triangles.length} triangles | display coordinates only`);
  }
- function showAsset(a){selected=a;meshes=[];render();text('assetTitle',a.title);text('details',`${a.kind} | ${a.status}\nLicense: ${a.license}\nLocal: ${a.local.status}\nUnits: ${a.units.status}\n${a.units.note}\n${a.notes}\n${a.attribution||'No geometry is included for this entry.'}`);$('source').href=a.sourceUrl;text('source','Open source and rights record');$('load').disabled=!a.local.available;$('structure').replaceChildren();text('meshInfo','');text('command',a.download?`node libraries/manager.mjs install ${a.id}`:'Metadata only. No download or clinical use is enabled.');}
+ function showAsset(a){selected=a;meshes=[];$('export').disabled=true;render();text('assetTitle',a.title);text('details',`${a.kind} | ${a.status}\nLicense: ${a.license}\nLocal: ${a.local.status}\nUnits: ${a.units.status}\n${a.units.note}\n${a.notes}\n${a.attribution||'No geometry is included for this entry.'}`);$('source').href=a.sourceUrl;text('source','Open source and rights record');$('load').disabled=!a.local.available;$('structure').replaceChildren();text('meshInfo','');text('command',a.download?`node libraries/manager.mjs install ${a.id}`:'Metadata only. No download or clinical use is enabled.');}
  function list(){const query=$('search').value.toLowerCase();$('assets').replaceChildren();for(const a of registry.assets.filter(a=>JSON.stringify([a.title,a.kind,a.status,a.coverage]).toLowerCase().includes(query))){const b=document.createElement('button');b.textContent=`${a.title} · ${a.local.status}`;b.onclick=()=>showAsset(a);$('assets').append(b);}}
  $('search').oninput=list;
- $('load').onclick=async()=>{try{text('meshInfo','Reading and verifying local asset...');const r=await fetch('/asset/'+selected.id);if(!r.ok)throw Error((await r.json()).error);const bytes=await r.arrayBuffer();const digest=await crypto.subtle.digest('SHA-256',bytes),sha=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');need(bytes.byteLength===selected.download.bytes&&sha===selected.download.sha256,'Browser checksum mismatch');meshes=parseAtlas(bytes);$('structure').replaceChildren();for(const [i,m]of meshes.entries()){const o=document.createElement('option');o.value=i;o.textContent=m.name+(selected.structureMap?.[m.name]?` | FDI ${selected.structureMap[m.name]}`:'');$('structure').append(o);}render();}catch(e){meshes=[];render();text('meshInfo',e.message);}};
+ $('load').onclick=async()=>{try{text('meshInfo','Reading and verifying local asset...');const r=await fetch('/asset/'+selected.id);if(!r.ok)throw Error((await r.json()).error);const bytes=await r.arrayBuffer();const digest=await crypto.subtle.digest('SHA-256',bytes),sha=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');need(bytes.byteLength===selected.download.bytes&&sha===selected.download.sha256,'Browser checksum mismatch');meshes=parseAtlas(bytes,selected.coverage.structures);$('export').disabled=false;$('structure').replaceChildren();for(const [i,m]of meshes.entries()){const o=document.createElement('option');o.value=i;o.textContent=m.name+(selected.structureMap?.[m.name]?` | FDI ${selected.structureMap[m.name]}`:'');$('structure').append(o);}render();}catch(e){meshes=[];$('export').disabled=true;render();text('meshInfo',e.message);}};
+ $('export').onclick=()=>{
+  const mesh=meshes[Number($('structure').value)];if(!mesh)return;
+  const comments=[
+   'MedCAD educational reference. Coordinates use display-normalized units.',
+   selected.attribution,
+   `License: ${selected.license} ${selected.licenseUrl}`,
+   selected.modifications,
+   `MedCAD extracted ${mesh.name} as OBJ without changing coordinates.`,
+   `Source: ${selected.sourceUrl} revision ${selected.revision}`
+  ];
+  const lines=comments.map(line=>`# ${line.replace(/[\r\n]/g,' ')}`);
+  lines.push(`o ${mesh.name}`);
+  for(const vertex of mesh.vertices)lines.push(`v ${vertex.join(' ')}`);
+  for(const triangle of mesh.triangles)lines.push(`f ${triangle.map(index=>index+1).join(' ')}`);
+  const url=URL.createObjectURL(new Blob([lines.join('\n')+'\n'],{type:'text/plain'}));
+  const a=document.createElement('a');a.href=url;a.download=`${mesh.name}.obj`;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+ };
  $('structure').onchange=render;$('left').onclick=()=>{yaw-=.25;render();};$('right').onclick=()=>{yaw+=.25;render();};$('up').onclick=()=>{pitch+=.2;render();};$('down').onclick=()=>{pitch-=.2;render();};$('reset').onclick=()=>{yaw=.5;pitch=.2;render();};
  fetch('/registry.json').then(r=>r.json()).then(r=>{registry=r;list();showAsset(r.assets[0]);}).catch(e=>text('details',e.message));render();
 }
