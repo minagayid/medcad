@@ -73,6 +73,61 @@
       }
     },
     {
+      "id": "bodyparts3d-skeleton-3-0",
+      "title": "BodyParts3D adult skeleton reference",
+      "kind": "anatomy-reference",
+      "status": "educational-reference-only",
+      "sourceUrl": "https://github.com/organui/skeleton-3d",
+      "revision": "120fc17278559057b37aff516eee89d263b604c6",
+      "format": "glb",
+      "license": "CC BY-SA 2.1 Japan",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en",
+      "attribution": "BodyParts3D, \u00a9 The Database Center for Life Science licensed under CC Attribution-Share Alike 2.1 Japan. Adapted by OrganUI.",
+      "modifications": "OrganUI selected 242 bone, cartilage and disc meshes, welded duplicate STL vertices, simplified meshes, recentered and uniformly scaled coordinates, changed axes from Z-up to Y-up, recomputed normals, assigned colors and converted STL to GLB. MedCAD imports the pinned GLB unchanged.",
+      "coverage": {
+        "structures": 242,
+        "skull": 23,
+        "vertebral_column": 48,
+        "thorax": 43,
+        "upper_limbs": 64,
+        "pelvis": 2,
+        "lower_limbs": 62
+      },
+      "units": {
+        "status": "display-normalized-not-mm",
+        "note": "Source meshes were recentered, transformed [x,z,-y], and scaled by 0.0025 for display. No patient-specific calibration or clinical measurements."
+      },
+      "notes": "A single adult male anatomical reference includes bone, cartilage and discs. Coccyx, ear ossicles and teeth are absent. Hip bones and foot sesamoids are grouped. Fine features are simplified. Region labels include inferred lower costal cartilage positions. This is educational reference anatomy without clinical review.",
+      "evidenceUrl": "https://github.com/organui/skeleton-3d/blob/120fc17278559057b37aff516eee89d263b604c6/docs/MODEL_PROVENANCE.md",
+      "download": {
+        "url": "https://raw.githubusercontent.com/organui/skeleton-3d/120fc17278559057b37aff516eee89d263b604c6/public/models/skeleton.glb",
+        "sha256": "c68b05d97d70c4d33363bf71d9885c191eb25f61a82dbba935a726ddd8e60ac8",
+        "bytes": 5221116,
+        "rightsReviewed": true
+      }
+    },
+    {
+      "id": "bonehub-visible-human",
+      "title": "BoneHub Visible Human CT bone models",
+      "kind": "anatomy-reference",
+      "status": "research-source-metadata-only",
+      "sourceUrl": "https://huggingface.co/datasets/BoneHub/visible-human-3d-models",
+      "revision": "2026-dataset-release",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "Alavi and Asseln, Visible-Human-3d-Models, DOI 10.57967/hf/10464; derived from Andreassen et al., Scientific Data 10, 34 (2023), DOI 10.1038/s41597-022-01905-2.",
+      "coverage": {
+        "male_labeled_structures": 142,
+        "female_labeled_structures": 143,
+        "subjects": 2
+      },
+      "units": {
+        "status": "per-file-not-verified",
+        "note": "Source provides CT, segmentation labels, meshes and CAD formats. Coordinate systems and units must be checked per file."
+      },
+      "notes": "CT-derived source with two subjects. Skull and digit phalanges are grouped, coccyx is combined with sacrum, elbows are truncated, and hyoid, sesamoids except patella and costal cartilage are absent. No measured X-ray pair data supplied. No assets installed through this entry."
+    },
+    {
       "id": "enable-paraglider-audit",
       "title": "e-NABLE Paraglider / Flexible Flyer",
       "kind": "prosthetic-mechanism",

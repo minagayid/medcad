@@ -82,3 +82,20 @@ Prioritize a reproducible single-crown research path before bridges or manufactu
 ## Next intake gate
 
 Before adding a real morphology or device library: record an exact source revision, all relevant file/code/data licenses, attribution and derivative obligations, hash/size, actual geometry format, units/frame, per-tooth or per-region coverage, required hardware/assembly, known defects and intended-use limits. Keep anatomy references, dental restoration anatomy, mechanical assistive designs and exact implant components separate. No paid services or commercial library scraping are needed for this stage.
+
+## Whole-skeleton educational reference
+
+Install and preview the independently licensed BodyParts3D 3.0 skeleton adapted by OrganUI:
+
+```sh
+node libraries/manager.mjs install bodyparts3d-skeleton-3-0
+node libraries/manager.mjs serve
+```
+
+The viewer provides 242 selectable 3D meshes of bones, cartilage and discs from a single adult male reference. The selectable mesh can be downloaded as OBJ with attribution and license information in its header. Coordinates remain display-normalized. They are not patient-calibrated and are not suitable for measurement or patient-specific design. Rotate the preview to inspect surfaces.
+
+The atlas has no coccyx, ear ossicles or teeth. Hip bones and foot sesamoids are grouped. The 242 structures include cartilage and discs and must not be counted as 242 bones. Small features have been simplified. The source has not been clinically reviewed.
+
+BodyParts3D, © The Database Center for Life Science, licensed under [CC BY-SA 2.1 Japan](https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en). Adapted by OrganUI. OrganUI selected 242 meshes, welded vertices, simplified, recentered and scaled geometry, changed axes, recomputed normals, assigned colors and converted STL to GLB. MedCAD imports that GLB unchanged and can extract a selected mesh to OBJ. [Pinned provenance and complete structure list](https://github.com/organui/skeleton-3d/blob/120fc17278559057b37aff516eee89d263b604c6/docs/MODEL_PROVENANCE.md).
+
+BoneHub's [Visible Human CT bone models](https://huggingface.co/datasets/BoneHub/visible-human-3d-models) are also listed as a separate source. The dataset supplies CT-derived labels, STL and CAD files for two individuals, with 142 and 143 labeled structures. It has grouped skull and digit phalanges, sacrum grouped with coccyx, incomplete elbows, and no hyoid or costal cartilages. Its CC BY 4.0 licensing and required citations are distinct from the BodyParts3D atlas above. This metadata entry does not install files and supplies no measured X-ray pairs.
